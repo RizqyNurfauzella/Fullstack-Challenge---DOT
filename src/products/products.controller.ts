@@ -1,8 +1,23 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 
 @Controller('api/products')
+@UseGuards(AuthenticatedGuard)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 

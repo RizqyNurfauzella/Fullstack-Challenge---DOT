@@ -18,10 +18,10 @@ import { Product } from './entities/product.entity';
       entities: [User, Category, Product],
       synchronize: true, // Auto-create tables (only for development/challenge)
     }),
-    AuthModule, 
-    UsersModule, 
-    CategoriesModule, 
-    ProductsModule
+    AuthModule,
+    UsersModule,
+    CategoriesModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
