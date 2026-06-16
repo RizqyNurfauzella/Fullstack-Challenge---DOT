@@ -1,98 +1,273 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Fullstack Challenge DOT - Admin Panel
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Admin panel berbasis NestJS TypeScript untuk mengelola data `categories` dan `products` dengan fitur login, CRUD, list, detail, pencarian, filter kategori, API untuk testing Postman, dan tampilan page menggunakan Handlebars.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Fitur
 
-## Description
+- Login admin menggunakan session Passport.
+- Dashboard ringkasan jumlah categories dan products.
+- CRUD `categories`.
+- CRUD `products`.
+- Upload gambar product melalui form admin panel.
+- Relasi one-to-many: satu category memiliki banyak products.
+- Halaman list dan detail untuk dua tabel utama.
+- Pencarian category berdasarkan name/description.
+- Pencarian product berdasarkan name/description/category.
+- Filter product berdasarkan category.
+- API endpoint untuk testing Postman setelah login.
+- Error handling untuk data tidak ditemukan, validasi relasi category, login gagal, dan delete category yang masih memiliki product.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack dan Dependency
 
-## Project setup
+- Node.js
+- NestJS TypeScript
+- TypeORM
+- better-sqlite3
+- Passport dan passport-local
+- express-session
+- bcrypt
+- hbs
+- class-validator dan class-transformer
+- Jest dan Supertest
 
-```bash
-$ npm install
+## Desain Database
+
+Desain database mengikuti requirement pada gambar challenge.
+
+```dbml
+Table users {
+  id int [pk, increment]
+  name varchar(100) [not null]
+  email varchar(100) [not null, unique]
+  password varchar(255) [not null]
+  role varchar(20) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table categories {
+  id int [pk, increment]
+  name varchar(100) [not null]
+  description text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table products {
+  id int [pk, increment]
+  category_id int [not null, ref: > categories.id]
+  name varchar(150) [not null]
+  description text
+  price decimal(12, 2) [not null]
+  stock int [not null]
+  image_url varchar(255)
+  status varchar(20) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
 ```
 
-## Compile and run the project
+Relasi:
+
+- `categories.id` ke `products.category_id`
+- One-to-many: 1 category dapat memiliki banyak product.
+
+## Screenshot Aplikasi
+
+### Login
+
+![Login](docs/screenshots/login.png)
+
+### Dashboard
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Categories
+
+![Categories](docs/screenshots/categories.png)
+
+### Products
+
+![Products](docs/screenshots/products.png)
+
+## Cara Setup
+
+Install dependency:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+Jalankan aplikasi:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Mode development:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Buka aplikasi:
 
-## Resources
+```text
+http://localhost:3000
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Database menggunakan SQLite lokal pada file:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```text
+database.sqlite
+```
 
-## Support
+TypeORM `synchronize` aktif untuk kebutuhan challenge/development sehingga tabel dibuat otomatis dari entity.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Akun Login
 
-## Stay in touch
+Seeder admin dibuat otomatis saat aplikasi start.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```text
+Email    : admin@admin.com
+Password : password123
+Role     : admin
+```
 
-## License
+## Struktur Project
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```text
+src/
+  app.controller.ts          # Controller halaman MVC admin panel
+  app.module.ts              # Root module dan konfigurasi TypeORM
+  main.ts                    # Bootstrap, session, passport, view engine, helper HBS
+  auth/                      # Login, local strategy, session serializer, guard
+  categories/                # Controller API, service, DTO category
+  products/                  # Controller API, service, DTO product
+  users/                     # Service user dan seed admin
+  entities/                  # Entity User, Category, Product
+views/
+  login.hbs
+  dashboard.hbs
+  error.hbs
+  categories/
+  products/
+public/css/app.css
+public/uploads/
+docs/screenshots/
+```
+
+## Implementasi MVC
+
+- Model: entity TypeORM di `src/entities`.
+- View: template Handlebars di `views`.
+- Controller: page controller di `src/app.controller.ts` dan API controller di module category/product.
+- Service: business logic dan akses repository di `src/categories/categories.service.ts`, `src/products/products.service.ts`, dan `src/users/users.service.ts`.
+
+## Endpoint Page
+
+| Method | URL | Keterangan |
+| --- | --- | --- |
+| GET | `/login` | Halaman login |
+| POST | `/login` | Proses login |
+| GET | `/logout` | Logout |
+| GET | `/` | Dashboard |
+| GET | `/admin/categories` | List dan search categories |
+| GET | `/admin/categories/create` | Form create category |
+| POST | `/admin/categories/create` | Simpan category baru |
+| GET | `/admin/categories/:id` | Detail category |
+| GET | `/admin/categories/:id/edit` | Form edit category |
+| POST | `/admin/categories/:id/edit` | Update category |
+| GET | `/admin/categories/:id/delete` | Delete category |
+| GET | `/admin/products` | List, search, filter products |
+| GET | `/admin/products/create` | Form create product |
+| POST | `/admin/products/create` | Simpan product baru |
+| GET | `/admin/products/:id` | Detail product |
+| GET | `/admin/products/:id/edit` | Form edit product |
+| POST | `/admin/products/:id/edit` | Update product |
+| GET | `/admin/products/:id/delete` | Delete product |
+
+## Endpoint API untuk Postman
+
+Login terlebih dahulu agar Postman menyimpan cookie session.
+Upload file gambar tersedia pada form product di admin panel. Endpoint API tetap menerima `image_url` agar pengujian Postman sederhana.
+
+| Method | URL | Keterangan |
+| --- | --- | --- |
+| POST | `/api/auth/login` | Login API |
+| GET | `/api/auth/profile` | Profil user login |
+| POST | `/api/auth/logout` | Logout API |
+| GET | `/api/categories?page=1&limit=10&search=...` | List categories |
+| GET | `/api/categories/:id` | Detail category |
+| POST | `/api/categories` | Create category |
+| PUT | `/api/categories/:id` | Update category |
+| DELETE | `/api/categories/:id` | Delete category |
+| GET | `/api/products?page=1&limit=10&search=...&category_id=1` | List products |
+| GET | `/api/products/:id` | Detail product |
+| POST | `/api/products` | Create product |
+| PUT | `/api/products/:id` | Update product |
+| DELETE | `/api/products/:id` | Delete product |
+
+Contoh body create category:
+
+```json
+{
+  "name": "Electronics",
+  "description": "Produk elektronik"
+}
+```
+
+Contoh body create product:
+
+```json
+{
+  "category_id": 1,
+  "name": "Keyboard Mechanical",
+  "description": "Keyboard untuk kerja dan gaming",
+  "price": 350000,
+  "stock": 10,
+  "image_url": "https://example.com/keyboard.jpg",
+  "status": "active"
+}
+```
+
+## Error Handling
+
+- Login gagal menampilkan pesan pada halaman login.
+- Data category/product tidak ditemukan akan menampilkan halaman error.
+- Product tidak bisa dibuat atau diupdate jika `category_id` tidak valid.
+- Category tidak bisa dihapus jika masih memiliki product.
+- DTO menggunakan `class-validator` untuk validasi request API.
+- Nest exception bawaan tetap digunakan untuk response API seperti `NotFoundException` dan `BadRequestException`.
+
+## Testing
+
+Build:
+
+```bash
+npm run build
+```
+
+Unit test:
+
+```bash
+npm test
+```
+
+E2E test:
+
+```bash
+npm run test:e2e
+```
+
+## Checklist Video Demo
+
+Saat membuat video demo, pastikan menampilkan:
+
+- Login.
+- CRUD categories.
+- CRUD products.
+- Testing semua endpoint API di Postman.
+- Penjelasan fitur dan alasan data yang ditampilkan.
+- Penjelasan MVC pada source code.
+- Penjelasan error handling.

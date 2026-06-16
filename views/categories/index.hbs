@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a class="brand" href="/">DOT Admin</a>
+          <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin/categories">Categories</a>
+            <a href="/admin/products">Products</a>
+            <a href="/logout">Logout</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>Categories</h1>
+            <p>Manajemen tabel categories dan relasinya dengan products.</p>
+          </div>
+          <a class="btn btn-primary" href="/admin/categories/create">Tambah Category</a>
+        </div>
+
+        {{#if error}}
+          <div class="alert alert-error">{{error}}</div>
+        {{/if}}
+
+        <div class="toolbar">
+          <form class="search-form search-form-compact" method="get" action="/admin/categories">
+            <input name="search" value="{{search}}" placeholder="Cari nama atau deskripsi" />
+            <button class="btn btn-light" type="submit">Cari</button>
+            <a class="btn btn-light" href="/admin/categories">Reset</a>
+          </form>
+          <span class="muted">Total: {{meta.total}} data</span>
+        </div>
+
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Products</th>
+                <th>Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each categories}}
+                <tr>
+                  <td>{{id}}</td>
+                  <td><strong>{{name}}</strong></td>
+                  <td>{{#if description}}{{description}}{{else}}<span class="muted">-</span>{{/if}}</td>
+                  <td>{{products.length}}</td>
+                  <td>{{formatDate updated_at}}</td>
+                  <td>
+                    <div class="actions">
+                      <a class="btn btn-light btn-small" href="/admin/categories/{{id}}">Detail</a>
+                      <a class="btn btn-light btn-small" href="/admin/categories/{{id}}/edit">Edit</a>
+                      <a class="btn btn-danger btn-small" href="/admin/categories/{{id}}/delete" onclick="return confirm('Hapus category ini?')">Delete</a>
+                    </div>
+                  </td>
+                </tr>
+              {{else}}
+                <tr>
+                  <td colspan="6" class="empty">Belum ada data category.</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </section>
+
+        <div class="pagination">
+          {{#if meta.hasPrevious}}
+            <a class="btn btn-light" href="/admin/categories?page={{meta.previousPage}}&search={{search}}">Previous</a>
+          {{/if}}
+          <span class="btn btn-light">Page {{meta.page}} / {{meta.totalPages}}</span>
+          {{#if meta.hasNext}}
+            <a class="btn btn-light" href="/admin/categories?page={{meta.nextPage}}&search={{search}}">Next</a>
+          {{/if}}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

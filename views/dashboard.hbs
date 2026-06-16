@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a class="brand" href="/">DOT Admin</a>
+          <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin/categories">Categories</a>
+            <a href="/admin/products">Products</a>
+            <a href="/logout">Logout</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>Dashboard</h1>
+            <p>Selamat datang, {{user.name}}. Kelola data kategori dan produk dari halaman ini.</p>
+          </div>
+        </div>
+
+        <section class="grid stats">
+          <article class="stat">
+            <span>Total Categories</span>
+            <strong>{{totalCategories}}</strong>
+          </article>
+          <article class="stat">
+            <span>Total Products</span>
+            <strong>{{totalProducts}}</strong>
+          </article>
+        </section>
+
+        <section class="panel panel-spaced">
+          <div class="toolbar">
+            <div class="panel-heading">
+              <h2>Menu Admin</h2>
+              <p class="muted">Gunakan menu berikut untuk CRUD dua tabel utama.</p>
+            </div>
+            <div class="actions">
+              <a class="btn btn-primary" href="/admin/categories/create">Tambah Category</a>
+              <a class="btn btn-primary" href="/admin/products/create">Tambah Product</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

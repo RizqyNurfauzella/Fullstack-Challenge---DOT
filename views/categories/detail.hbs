@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a class="brand" href="/">DOT Admin</a>
+          <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin/categories">Categories</a>
+            <a href="/admin/products">Products</a>
+            <a href="/logout">Logout</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>{{category.name}}</h1>
+            <p>Detail category beserta daftar product yang terhubung.</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-light" href="/admin/categories">Kembali</a>
+            <a class="btn btn-primary" href="/admin/categories/{{category.id}}/edit">Edit</a>
+          </div>
+        </div>
+
+        <section class="panel">
+          <dl class="detail-list">
+            <dt>ID</dt>
+            <dd>{{category.id}}</dd>
+            <dt>Name</dt>
+            <dd>{{category.name}}</dd>
+            <dt>Description</dt>
+            <dd>{{#if category.description}}{{category.description}}{{else}}-{{/if}}</dd>
+            <dt>Created</dt>
+            <dd>{{formatDate category.created_at}}</dd>
+            <dt>Updated</dt>
+            <dd>{{formatDate category.updated_at}}</dd>
+          </dl>
+        </section>
+
+        <section class="table-wrap panel-spaced">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each category.products}}
+                <tr>
+                  <td>{{id}}</td>
+                  <td>{{name}}</td>
+                  <td>{{formatCurrency price}}</td>
+                  <td>{{stock}}</td>
+                  <td><span class="badge badge-{{status}}">{{status}}</span></td>
+                  <td><a class="btn btn-light btn-small" href="/admin/products/{{id}}">Detail</a></td>
+                </tr>
+              {{else}}
+                <tr>
+                  <td colspan="6" class="empty">Category ini belum memiliki product.</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

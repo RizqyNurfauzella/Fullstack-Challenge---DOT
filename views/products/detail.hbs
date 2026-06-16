@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a class="brand" href="/">DOT Admin</a>
+          <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin/categories">Categories</a>
+            <a href="/admin/products">Products</a>
+            <a href="/logout">Logout</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>{{product.name}}</h1>
+            <p>Detail product dan category yang terkait.</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-light" href="/admin/products">Kembali</a>
+            <a class="btn btn-primary" href="/admin/products/{{product.id}}/edit">Edit</a>
+          </div>
+        </div>
+
+        <section class="panel detail-panel">
+          <div class="detail-media">
+            {{#if product.image_url}}
+              <img class="product-image" src="{{product.image_url}}" alt="{{product.name}}" />
+            {{else}}
+              <div class="product-image placeholder">No image</div>
+            {{/if}}
+          </div>
+
+          <dl class="detail-list">
+            <dt>ID</dt>
+            <dd>{{product.id}}</dd>
+            <dt>Name</dt>
+            <dd>{{product.name}}</dd>
+            <dt>Category</dt>
+            <dd><a href="/admin/categories/{{product.category.id}}">{{product.category.name}}</a></dd>
+            <dt>Description</dt>
+            <dd>{{#if product.description}}{{product.description}}{{else}}-{{/if}}</dd>
+            <dt>Price</dt>
+            <dd>{{formatCurrency product.price}}</dd>
+            <dt>Stock</dt>
+            <dd>{{product.stock}}</dd>
+            <dt>Status</dt>
+            <dd><span class="badge badge-{{product.status}}">{{product.status}}</span></dd>
+            <dt>Created</dt>
+            <dd>{{formatDate product.created_at}}</dd>
+            <dt>Updated</dt>
+            <dd>{{formatDate product.updated_at}}</dd>
+          </dl>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <main class="auth-page">
+      <section class="auth-box">
+        <div class="auth-brand">
+          <span class="auth-brand-mark">D</span>
+          <span>DOT Admin</span>
+        </div>
+
+        <div class="auth-card-header">
+          <h1>Masuk ke Admin Panel</h1>
+          <p>Kelola kategori dan produk dalam satu dashboard yang rapi.</p>
+        </div>
+
+        {{#if error}}
+          <div class="alert alert-error">{{error}}</div>
+        {{/if}}
+
+        <form method="post" action="/login" class="grid">
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="{{email}}" required />
+          </div>
+          <div class="form-row">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+
+        <div class="auth-meta">
+          <span>Demo admin</span>
+          <strong>admin@admin.com / password123</strong>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

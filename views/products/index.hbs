@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a class="brand" href="/">DOT Admin</a>
+          <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin/categories">Categories</a>
+            <a href="/admin/products">Products</a>
+            <a href="/logout">Logout</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>Products</h1>
+            <p>Manajemen tabel products dengan relasi category.</p>
+          </div>
+          <a class="btn btn-primary" href="/admin/products/create">Tambah Product</a>
+        </div>
+
+        {{#if error}}
+          <div class="alert alert-error">{{error}}</div>
+        {{/if}}
+
+        <div class="toolbar">
+          <form class="search-form" method="get" action="/admin/products">
+            <input name="search" value="{{search}}" placeholder="Cari product, deskripsi, atau category" />
+            <select name="category_id">
+              <option value="">Semua category</option>
+              {{#each categories}}
+                <option value="{{id}}" {{#if (eq id ../selectedCategoryId)}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            </select>
+            <button class="btn btn-light" type="submit">Cari</button>
+            <a class="btn btn-light" href="/admin/products">Reset</a>
+          </form>
+          <span class="muted">Total: {{meta.total}} data</span>
+        </div>
+
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each products}}
+                <tr>
+                  <td>{{id}}</td>
+                  <td>
+                    {{#if image_url}}
+                      <img class="thumb" src="{{image_url}}" alt="{{name}}" />
+                    {{else}}
+                      <span class="thumb thumb-empty">-</span>
+                    {{/if}}
+                  </td>
+                  <td><strong>{{name}}</strong></td>
+                  <td>{{category.name}}</td>
+                  <td>{{formatCurrency price}}</td>
+                  <td>{{stock}}</td>
+                  <td><span class="badge badge-{{status}}">{{status}}</span></td>
+                  <td>
+                    <div class="actions">
+                      <a class="btn btn-light btn-small" href="/admin/products/{{id}}">Detail</a>
+                      <a class="btn btn-light btn-small" href="/admin/products/{{id}}/edit">Edit</a>
+                      <a class="btn btn-danger btn-small" href="/admin/products/{{id}}/delete" onclick="return confirm('Hapus product ini?')">Delete</a>
+                    </div>
+                  </td>
+                </tr>
+              {{else}}
+                <tr>
+                  <td colspan="8" class="empty">Belum ada data product.</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </section>
+
+        <div class="pagination">
+          {{#if meta.hasPrevious}}
+            <a class="btn btn-light" href="/admin/products?page={{meta.previousPage}}&search={{search}}&category_id={{selectedCategoryId}}">Previous</a>
+          {{/if}}
+          <span class="btn btn-light">Page {{meta.page}} / {{meta.totalPages}}</span>
+          {{#if meta.hasNext}}
+            <a class="btn btn-light" href="/admin/products?page={{meta.nextPage}}&search={{search}}&category_id={{selectedCategoryId}}">Next</a>
+          {{/if}}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
